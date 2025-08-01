@@ -14,8 +14,11 @@ import markdown
 import json
 app = FastAPI()
 
-app.mount("/static", StaticFiles(directory="app/static"), name="static")
-templates = Jinja2Templates(directory="app/templates")
+from pathlib import Path
+BASE_DIR = Path(__file__).resolve().parent
+templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
+app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
+
 
 @app.get("/", response_class=HTMLResponse)
 def index(request: Request):
