@@ -22,7 +22,9 @@ app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="stat
 
 @app.get("/", response_class=HTMLResponse)
 def index(request: Request):
+    print("⚡️ / route hit")
     return templates.TemplateResponse("index.html", {"request": request})
+
 
 @app.post("/review", response_class=HTMLResponse)
 async def review_repo(request: Request, repo_url: str = Form(...), gh_token: str = Form(...)):
