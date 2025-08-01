@@ -1,5 +1,26 @@
 {% extends "base.html" %}
 {% block content %}
+
+<style>
+table {
+  border-collapse: collapse;
+  width: auto;
+  margin: 2em auto; /* top margin + center alignment */
+  border: 2px solid #ccc; /* medium border thickness */
+}
+
+th, td {
+  border: 2px solid #ccc;
+  padding: 10px 16px;
+  text-align: center; /* center cell content */
+}
+
+th {
+  background-color: #f4f4f4;
+}
+</style>
+
+
     <p><b>Repository:</b> <a href="{{ repo_url }}" target="_blank">{{ repo_url }}</a></p>
     <br>
     {% if summary %}
@@ -24,6 +45,7 @@
             </ul>
             <br>
         {% endif %}
+        <!--
         {% if summary['readability_score'] %}
             <h3>Readability Score: {{ summary['readability_score'] }}/10</h3>
             <p><i>{{ summary['score_reason'] }}</i></p>
@@ -34,10 +56,21 @@
             <p>{{ summary['next_steps'] }}</p>
             <br>
         {% endif %}
+        -->
     {% else %}
         <p>No summary available.</p>
         <br>
     {% endif %}
+
+
+    {% if markdown_summary %}
+        <h2>In-Depth Review</h2>
+        <div>{{ markdown_summary | safe }}</div>
+    {% else %}
+        <p>No markdown summary available.</p>
+        <br>
+    {% endif %}
+
     <a href="/">Try another repo</a>
 {% endblock %}
 

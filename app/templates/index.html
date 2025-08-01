@@ -10,89 +10,26 @@
             <span class="tooltip-i" tabindex="0">
                 <b>i</b>
                 <span class="tooltip-text">
-                    How to get a GitHub Access Token:<br>
-                    1. Click Get token<br>
-                    2. Click “Generate new token” or “Fine-grained token”.<br>
-                    3. For Classic tokens: </br>
-                    select the repo scope (for private repos) or public_repo (for public repos).<br>
-                    4. For Fine-grained tokens:</br>
-                    select the repositories you want and give Read-only permissions for Contents.<br>
-                    5. Generate and copy the token, then paste it here.<br>
-                    Note: We do not store your token-it's used only temporarily for code review.
+                    How to get your GitHub Access Token:<br>
+                    1. Paste your GitHub repository URL above.<br>
+                    2. Click the "Get token" link here<br>
+                    3. Click “Generate new token”<br>
+                    4. Select the first option ("fine-grain...")<br>
+                    5. Fill your GitHub Password if prompted to.<br>
+                    6. Enter any random token name and generate token.<br>
                 </span>
             </span>
         </label>
         <br>
         <input type="password" id="gh_token" name="gh_token" placeholder="Paste your token here" style="width: 320px;" required><br>
         <small>
-            <i>We don’t store your token. It's only used temporarily to fetch your repo and discarded after processing.</i>
+            <i>We don’t store your token. It is only used temporarily to fetch your repo and is discarded after processing.</i>
         </small><br><br>
 
         <button type="submit">Review</button>
     </form>
-    <!-- Catfish Loader (hidden by default) -->
-    <!-- Catfish Loader (hidden by default) -->
-    <!-- <div id="catfish-loading" style="display: none; text-align: center; margin-top: 2em;">
-        <button type="button" id="catfish-btn" class="catfish-btn">Catch me to see your results!</button>
-        <div style="margin-top: 2em; font-size: 1.08em;">
-            <b>Please Submit to Continue</b><br>
-            Submitting is required for moving Forward
-        </div>
-    </div>
 
-    <script>
-    const form = document.getElementById('review-form');
-    const catfishLoading = document.getElementById('catfish-loading');
-    const catfish = document.getElementById('catfish-btn');
-
-    form.addEventListener('submit', function() {
-        // Show catfish loader
-        catfishLoading.style.display = 'block';
-        form.style.display = 'none';
-    });
-
-    // --- Ultra-fast, full-screen movement ---
-    if (catfish) {
-        const btnW = 180, btnH = 56; // Approx button size
-
-        function moveCatfish(e) {
-            // Window size
-            const winW = window.innerWidth, winH = window.innerHeight;
-
-            // Mouse pointer
-            let nx = Math.random() * (winW - btnW);
-            let ny = Math.random() * (winH - btnH);
-
-            // Optional: Keep some padding
-            nx = Math.max(8, Math.min(nx, winW - btnW - 8));
-            ny = Math.max(8, Math.min(ny, winH - btnH - 8));
-
-            catfish.style.left = nx + "px";
-            catfish.style.top = ny + "px";
-        }
-
-        catfish.addEventListener('mouseenter', moveCatfish);
-        catfish.addEventListener('mousemove', moveCatfish);
-
-        // (Optional) Fun messages after attempts
-        let hoverCount = 0;
-        catfish.addEventListener('mouseenter', function() {
-            hoverCount++;
-            if (hoverCount === 25) catfish.textContent = "Not so easy 😼";
-            if (hoverCount === 40) catfish.textContent = "You'll never catch me!";
-            if (hoverCount === 60) catfish.textContent = "Give up? Results loading anyway 😎";
-        });
-
-        catfish.addEventListener('click', function(e){
-            e.preventDefault();
-        });
-    }
-    </script>
-
-
- -->
-
-    Loading GIF (hidden by default) 
+    <!-- Loading GIF (hidden by default) -->
     <div id="loading" style="display: none; text-align: center; margin-top: 2em;">
         <img src="/static/files/mrbean.gif"
             alt="Loading..." 
@@ -100,7 +37,7 @@
         >
         <div style="margin-top: 1em; font-size: 1.1em;">
             <b>Review in progress...</b><br>
-            Mr. Bean is waiting. Please be patient!
+            This can take upto 2 minutes. Please be patient!
         </div>
     </div>
 

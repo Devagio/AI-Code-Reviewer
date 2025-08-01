@@ -10,6 +10,7 @@ from app.core.Baseai_checker import AIMetadataFileFinder
 from app.core.Pyfiles_checker import PyCodeReviewer
 from app.core.naturallang import Naturallangoutput
 from app.core.Additionalfunc import Atomic_commits,BranchPRReview
+import markdown
 import json
 app = FastAPI()
 
@@ -44,6 +45,8 @@ async def review_repo(request: Request, repo_url: str = Form(...), gh_token: str
         all_results = meta_results + py_results + commit_results + pr_results
         # Generate natural-language summary
         summary = Naturallangoutput.output(all_results)
+        markdown_summary_raw = Naturallangoutput.markdown_output(all_results)
+        markdown_summary = markdown.markdown(markdown_summary_raw, extensions=["tables"])
         
         if isinstance(summary, str):
             try:
@@ -55,6 +58,7 @@ async def review_repo(request: Request, repo_url: str = Form(...), gh_token: str
             "request": request,
             "repo_url": repo_url,
             "summary": summary,
+            "markdown_summary": markdown_summary,
         })
     except Exception as e:
         traceback.print_exc()

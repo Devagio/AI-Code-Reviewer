@@ -5,6 +5,7 @@ jinja2==3.1.2                # Templating engine for rendering HTML pages
 openai==0.27.8               # OpenAI API client for GPT-4 integration
 flake8==6.0.0                # Python linter for static code analysis
 python-multipart==0.0.6      # For handling form data in FastAPI POST requests
+markdown
 flower
 redis
 celery[redis]

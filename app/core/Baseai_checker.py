@@ -57,7 +57,7 @@ class AIMetadataFileFinder:
     @classmethod
     def check_other_package_files_with_ai(cls,all_files: List[str]):
         prompt = Template(PACKAGE_PROMPT).render(files=all_files)
-        response = ask_chatgpt(prompt, model="gpt-4.1-nano-2025-04-14")
+        response = ask_chatgpt(prompt, model="gpt-4.1-mini-2025-04-14")
         return json.loads(response)
 
 

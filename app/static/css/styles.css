@@ -3,7 +3,8 @@ body {
     background: #f3f4f9;
 }
 .container {
-    max-width: 600px;
+    max-width: 1200px;
+    width: 90%;
     margin: 30px auto;
     background: #fff;
     padding: 2em 2em 1.5em 2em;
@@ -91,23 +92,3 @@ pre {
     padding: 0 4px;
     font-size: 0.97em;
 }
-/* .catfish-btn {
-    position: absolute;
-    left: 0;
-    top: 0;
-    background: linear-gradient(120deg, #13a1f7 60%, #1f55e0 100%);
-    color: #fff;
-    border: none;
-    border-radius: 30px;
-    padding: 0.7em 2em;
-    font-size: 1.08em;
-    cursor: pointer;
-    transition: left 0.23s cubic-bezier(.4,2,.6,.6), top 0.23s cubic-bezier(.4,2,.6,.6);
-    box-shadow: 0 2px 16px #1251b52a;
-    z-index: 9;
-    user-select: none;
-}
-.catfish-btn:active {
-    background: #0c3480;
-}
- */

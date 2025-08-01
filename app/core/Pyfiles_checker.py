@@ -8,8 +8,9 @@ from app.api.ai_review import ask_chatgpt
 
 class PyCodeReviewer:
     @staticmethod
-    def review_files(py_files: List[str], user: str,repo: str, branch: str,token=None) -> List[OrderedDict]:
+    def review_files(py_files: List[str], user: str,repo: str, branch: str, max_files=30, token=None) -> List[OrderedDict]:
         results = []
+        if len(py_files) > max_files: return results
 
         for file_path in py_files:
             code = get_file_content(user, repo, file_path, branch,token=token)
@@ -18,7 +19,7 @@ class PyCodeReviewer:
             print(f"Reviewing {file_path} ...")
             prompt = Template(PYTHON_FILE_REVIEW_PROMPT).render(code=code)
             try:
-                ai_json_str = ask_chatgpt(prompt, model="gpt-4.1-nano-2025-04-14")
+                ai_json_str = ask_chatgpt(prompt, model="gpt-4.1-mini-2025-04-14")
                 ai_json = json.loads(ai_json_str)
                 output_json = OrderedDict()
                 output_json["file"] = file_path

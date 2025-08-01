@@ -1,8 +1,11 @@
 PYTHON_FILE_REVIEW_PROMPT = """
 You are a senior Python code reviewer.
-Here is the code {{ code }}
+Here is the code:
 
-Analyze the following Python file for the three criteria below and output ONLY valid JSON in the following format:
+{{ code }}
+
+
+Analyze this Python file for the three criteria below and output ONLY valid JSON in the following format:
 {
   "comments": {"status": "...", "suggestion": "..."},
   "docstrings": {
@@ -59,7 +62,7 @@ Output JSON only. Example:
   "requirements": "<exact file name or path>",
   "license": "<exact file name or path>"
 }
-If a file is missing, output null for that field.
+If a file is missing, output "NULL" for that field.
 **Important:** Output ONLY the raw JSON object above. Do NOT wrap your response in any markdown, code blocks, or backticks. No explanations or comments—just the JSON. Use null (not 'None' or empty string) if a file is not found.
 """
 
@@ -70,10 +73,11 @@ You will be given the full content of a LICENSE file from a code repository and 
 LICENSE file content:
 {{ license_content }}
 
-your tasks:
+Your tasks:
 1. **SPDX Identifier Check**: Determine whether the content contains a valid SPDX license identifier. If yes, "<'valid', 'invalid', or 'unknown'>"
 2. **License Name Extraction**: Extract the human-readable name of the license (for example: MIT, Apache License 2.0, GNU GPL, etc.).
 3. **Suggestion**: Based on the content and type of project, suggest a potentially better or more common license for this use-case, if any. If the current license is appropriate, state that clearly.
+The overall project is intended to be a simple open-source codebase created during an astronomy software workshop.
 
 Output a JSON object with these exact fields and formatting:
 
@@ -152,30 +156,73 @@ Output your findings as a raw JSON object in the following format:
 
 **Important:** Output ONLY the raw JSON object above. Do NOT wrap your response in any markdown, code blocks, or backticks. No explanations or comments—just the JSON.
 """
-CODE_SUMMARY_PROMPT = """
-You are an expert code reviewer and Python educator.
 
-Given this JSON with per-file analysis of comments, docstrings, and function modularity for a Python codebase:
 
-{{ results }}
 
-Please:
-1. Write a concise, friendly summary (in natural, human language) explaining the overall code quality, strengths, and weaknesses. Avoid jargon. Be honest but encouraging!
-2. Suggest the top 3 actionable improvements for the project.
-3. Assign an overall readability/writing quality score between 1 and 10 (where 10 is perfect open-source style and 1 is unreadable code). Provide 1-2 sentences justifying the score.
+ATOMIC_Commits = """
+You are an expert code reviewer.
+Check the following git commit message and output ONLY a suggestion (or a compliment if it's already good):
+- Avoid messages like "fix", "update", "changes".
+- Vague commit messages should be flagged.
+- Good messages should describe the change and its purpose.
+- If the message is vague, suggest how to make it more specific.
+- Output a single line suggestion or compliment, nothing else.
 
-Output JSON in this format:
-{
-  "summary": "A brief human-language summary...",
-  "top_improvements": [
-    "First suggestion...",
-    "Second suggestion...",
-    "Third suggestion..."
-  ],
-  "readability_score": 7,
-  "score_reason": "One or two lines explaining why this score."
-}
+Commit message:
+{{ commit_msg }}
+
 """
+
+
+PR_PROMPT = """
+You are an expert open-source code reviewer.
+
+For the following data, review these two things separately:
+Title: {{ title }}
+Description: {{ body }}
+
+1. **PR Title Review**:
+- Is the PR title longer than 3 words and clearly descriptive of the changes?
+- If not, suggest a better title.
+
+2. **PR Description Review**:
+- Does the description clearly state the purpose and what was changed?
+- Does it mention screenshots, images, or code snippets if they would help?
+- Does it reference an issue (e.g., “Fixes #4”) if relevant?
+- Suggest improvements if anything is missing.
+
+Output your review as a JSON object with the following structure, with actionable suggestions:
+{
+  "title_review": "<feedback or suggestion for the title>",
+  "description_review": "<feedback or suggestion for the description>"
+}
+**Important:** Output ONLY the raw JSON object above. Do NOT wrap your response in any markdown, code blocks, or backticks. No explanations or comments—just the JSON.
+"""
+
+
+PACKAGE_PROMPT = """
+You are a Python packaging expert.
+
+Given this list of all files and paths in a repository:
+{{ files }}
+
+Check only for the following important package-related files (ignore README, LICENSE, and requirements.txt):
+
+- setup.py
+- pyproject.toml
+- setup.cfg
+- .gitignore
+- At least one __init__.py (in any directory)
+
+For each, in the output JSON, include:
+- "filename": "<actual filename or path if present, else null>"
+- "available": true/false
+- "useful_for": "<short explanation of why this file is important for a Python package>"
+
+If a file is missing (no variant present), add an entry with "available": false and a brief useful_for reason.
+**Important:** Output ONLY the raw JSON object above. Do NOT wrap your response in any markdown, code blocks, or backticks. No explanations or comments—just the JSON.
+"""
+
 
 
 Naturallangprompt ="""
@@ -236,67 +283,75 @@ Review all code file analyses in results before writing your response.
 Make your advice clear, specific, and supportive for users at any level.
 Focus on concrete tips and easy wins—help the author get better with each review!
 """
-ATOMIC_Commits = """
-You are an expert code reviewer.
-Check the following git commit message and output ONLY a suggestion (or a compliment if it's already good):
-- Avoid messages like "fix", "update", "changes".
-- Vague commit messages should be flagged.
-- Good messages should describe the change and its purpose.
-- If the message is vague, suggest how to make it more specific.
-- Output a single line suggestion or compliment, nothing else.
 
-Commit message:
-{{ commit_msg }}
 
+REVIEW_TABLE_PROMPT = """
+You are a friendly, expert Python code reviewer.
+
+You’ll receive a JSON object called results, containing AI-generated reviews of several Python files. These reviews include information about comments, docstrings, code structure, and overall quality.
+Given this JSON with per-file analysis of comments, docstrings, and function modularity for a Python codebase:
+
+{{ results }}
+
+Your job is to create a bunch of MarkDown tables to help humans be able to understand this JSON.
+
+
+Table 1: 
+Heading: # Project Structure
+Create a table with three columns (File, File Name, Avaiable) and five rows.
+Under 'File', there will be setup.py, pyproject.toml, setup.cfg, .gitignore, __init__.py)
+Under 'File Name' and 'Available' have the corresponding data from the JSON.
+In place of None and False, use the cross emoji; and in place of True, use the tick emoji.
+
+
+Table 2:
+Heading: ### LICENSE
+Create a table describing the LICENSE. 
+In place of None and False, use the cross emoji; and in place of True, use the tick emoji.
+You may replace this entire table by a simple sentence if no LICENSE file was found according to the JSON.
+
+Table 3:
+Heading: ### README
+Create a table describing the README, with two columns: Aim and Status. 
+In place of None and False, use the cross emoji; and in place of True, use the tick emoji.
+If any suggestion is present for the README, do not include it in the table; instead, simply add a sentence after the table describing the suggestion.
+You may replace this entire table by a simple sentence if no README file was found according to the JSON.
+
+Table 4:
+Heading: ### requirements.txt
+Create a table describing the requirements.txt-type file. 
+In place of None and False, use the cross emoji; and in place of True, use the tick emoji.
+If any specific issues are present for this file, do not include them in the table; instead simply add them add bullet points right after the table.
+You may replace this entire table by a simple sentence if no requirements.txt-type file was found according to the JSON.
+
+
+Table 5:
+Heading: ### .py Files
+Create a table whose rows are .py files, and whose columns are file name, comments status, overall docstring status, and function modularity status.
+In place of "needs improvement", use the cross emoji; and in place of "good", use the tick emoji.
+Right after the table, output a summary of all comment suggestions, overall docstring suggestions, and function modularity suggestions.
+You may replace this entire table by a simple sentence if no .py files were found (or way too many .py files were found) according to the JSON.
+
+Table 6:
+Heading: ### Functions
+Create a table whose rows are individual functions found in all .py files combined; and whose columns are function name, docstring status, and short docstring suggestion.
+In place of None, False, or absent, use the cross emoji; and in place of True, or present, use the tick emoji.
+You may replace this entire table by a simple sentence if no .py files were found (or way too many .py files were found) according to the JSON.
+
+
+Table 7:
+Heading: ### Commit History
+Create a table of all commits, with columns being "Commit ID", "<4 files changed", "<300 lines changed", and "Commit Message Review".
+If for a given commit, the number of files changed is less than or equal to 3, then give file change limit a tick, else give it a cross.
+If for a given commit, the number of lines changed is less than or equal to 300, then give line change limit a tick, else give it a cross.
+Under message review, give a shortened review of the commit message.
+You may replace this entire table by a simple sentence if no commits were found according to the JSON.
+
+Table 8:
+Heading: ### PR History
+Create a table of all PRs, with columns representing the shortened title review, and shortened description review.
+You may replace this entire table by a simple sentence if no PRs were found according to the JSON.
+
+
+**Important:** Output ONLY the MarkDown. Do NOT wrap your response in any code blocks or backticks. No explanations or comments—just the JSON.
 """
-
-
-PR_PROMPT = """
-You are an expert open-source code reviewer.
-
-For the following data, review these two things separately:
-Title: {{ title }}
-Description: {{ body }}
-
-1. **PR Title Review**:
-- Is the PR title longer than 3 words and clearly descriptive of the changes?
-- If not, suggest a better title.
-
-2. **PR Description Review**:
-- Does the description clearly state the purpose and what was changed?
-- Does it mention screenshots, images, or code snippets if they would help?
-- Does it reference an issue (e.g., “Fixes #4”) if relevant?
-- Suggest improvements if anything is missing.
-
-Output your review as a JSON object with the following structure, with actionable suggestions:
-{
-  "title_review": "<feedback or suggestion for the title>",
-  "description_review": "<feedback or suggestion for the description>"
-}
-**Important:** Output ONLY the raw JSON object above. Do NOT wrap your response in any markdown, code blocks, or backticks. No explanations or comments—just the JSON.
-"""
-
-
-PACKAGE_PROMPT = """
-You are a Python packaging expert.
-
-Given this list of all files and paths in a repository:
-{{ files }}
-
-Check only for the following important package-related files (ignore README, LICENSE, and requirements.txt/pyproject.toml/requirements.in):
-
-- setup.py
-- pyproject.toml
-- setup.cfg
-- .gitignore
-- At least one __init__.py (in any directory)
-
-For each, in the output JSON, include:
-- "filename": "<actual filename or path if present, else null>"
-- "available": true/false
-- "useful_for": "<short explanation of why this file is important for a Python package>"
-
-If a file is missing (no variant present), add an entry with "available": false and a brief useful_for reason.
-**Important:** Output ONLY the raw JSON object above. Do NOT wrap your response in any markdown, code blocks, or backticks. No explanations or comments—just the JSON.
-"""
-

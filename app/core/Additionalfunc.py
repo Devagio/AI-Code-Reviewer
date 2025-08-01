@@ -7,7 +7,7 @@ import json
 
 class Atomic_commits:
     @staticmethod
-    def get_commits(user: str, repo: str, branch: str, per_page: int = 10, max_commits: int = 300, token: str = None) -> List[Dict]:
+    def get_commits(user: str, repo: str, branch: str, per_page: int = 10, max_commits: int = 50, token: str = None) -> List[Dict]:
         commits_info = []
         url = f"https://api.github.com/repos/{user}/{repo}/commits"
         params = {"sha": branch, "per_page": per_page, "page": 1}
@@ -42,7 +42,7 @@ class Atomic_commits:
         return commits_info
 
     @staticmethod
-    def commit_reviewer(user: str, repo: str, branch: str, per_page: int = 10, max_commits: int = 300, token: str = None) -> List[Dict]:
+    def commit_reviewer(user: str, repo: str, branch: str, per_page: int = 10, max_commits: int = 50, token: str = None) -> List[Dict]:
         # Fetch commits inside the reviewer
         commits_info = Atomic_commits.get_commits(user, repo, branch, per_page, max_commits, token)
         reviewed = []
@@ -50,13 +50,13 @@ class Atomic_commits:
             msg = commit.get("commit_message", "")
             prompt = Template(ATOMIC_Commits).render(commit_msg=msg)
             try:
-                review = ask_chatgpt(prompt, model="gpt-4.1-nano-2025-04-14")
+                review = ask_chatgpt(prompt, model="gpt-4.1-mini-2025-04-14")
             except Exception as e:
                 review = f"Error in AI review: {e}"
 
             # Files changed review
             if commit["files_changed"] > 3:
-                files_review = "More than 3 files changed. For clarity and easier code review, try to keep each commit under 4 files."
+                files_review = "More than 3 files changed. For clarity and easier code review, try to keep each commit to 3 files or less."
             else:
                 files_review = "Good job! Number of files changed is within the recommended limit."
 
@@ -91,6 +91,8 @@ class BranchPRReview:
 
         if not prs:
             results.append({"pr": "No Pull Requests found."})
+        elif len(prs) > 20:
+            results.append({"pr": "Way too many Pull Requests found. (>20)"})
         else:
             for pr in prs:
                 title = pr.get('title', '')
