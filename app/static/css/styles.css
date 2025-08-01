@@ -1,0 +1,113 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #f3f4f9;
+}
+.container {
+    max-width: 600px;
+    margin: 30px auto;
+    background: #fff;
+    padding: 2em 2em 1.5em 2em;
+    border-radius: 10px;
+    box-shadow: 0 4px 16px #8881;
+}
+form {
+    margin: 2em 0;
+}
+input, button {
+    padding: 0.5em;
+    margin: 0.5em 0;
+    border-radius: 4px;
+    border: 1px solid #bbb;
+}
+button {
+    background: #1251b5;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+button:hover {
+    background: #0c3480;
+}
+pre {
+    border-radius: 6px;
+    overflow-x: auto;
+    font-size: 0.98em;
+}
+.tooltip-i {
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    margin-left: 0.4em;
+    color: #1757aa;
+}
+.tooltip-i b {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #eaf2fb;
+    color: #1757aa;
+    text-align: center;
+    line-height: 17px;
+    font-size: 15px;
+    font-family: Arial, sans-serif;
+    border: 1px solid #b3c9e9;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+.tooltip-i b:hover {
+    background: #d6e6fa;
+}
+.tooltip-text {
+    display: none;
+    position: absolute;
+    left: 120%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 320px;
+    background: #fff;
+    color: #1d2329;
+    border: 1px solid #c9e3ff;
+    border-radius: 8px;
+    box-shadow: 0 2px 16px #a1b6e63a;
+    padding: 14px 18px;
+    font-size: 0.97em;
+    z-index: 100;
+    white-space: normal;
+    text-align: left;
+    pointer-events: none;
+}
+.tooltip-i:hover .tooltip-text,
+.tooltip-i:focus-within .tooltip-text {
+    display: block;
+}
+.tooltip-text a {
+    color: #1757aa;
+    text-decoration: underline;
+}
+.tooltip-text code {
+    background: #eef2fa;
+    border-radius: 4px;
+    padding: 0 4px;
+    font-size: 0.97em;
+}
+/* .catfish-btn {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: linear-gradient(120deg, #13a1f7 60%, #1f55e0 100%);
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    padding: 0.7em 2em;
+    font-size: 1.08em;
+    cursor: pointer;
+    transition: left 0.23s cubic-bezier(.4,2,.6,.6), top 0.23s cubic-bezier(.4,2,.6,.6);
+    box-shadow: 0 2px 16px #1251b52a;
+    z-index: 9;
+    user-select: none;
+}
+.catfish-btn:active {
+    background: #0c3480;
+}
+ */

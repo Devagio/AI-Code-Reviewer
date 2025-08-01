@@ -1,0 +1,10 @@
+fastapi==0.95.1              # FastAPI framework for building the web API
+uvicorn[standard]==0.22.0    # ASGI server to run FastAPI app with reload support
+httpx==0.24.1                # HTTP client for GitHub and OpenAI API calls
+jinja2==3.1.2                # Templating engine for rendering HTML pages
+openai==0.27.8               # OpenAI API client for GPT-4 integration
+flake8==6.0.0                # Python linter for static code analysis
+python-multipart==0.0.6      # For handling form data in FastAPI POST requests
+flower
+redis
+celery[redis]

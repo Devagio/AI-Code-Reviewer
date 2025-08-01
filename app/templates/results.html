@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+    <p><b>Repository:</b> <a href="{{ repo_url }}" target="_blank">{{ repo_url }}</a></p>
+    <br>
+    {% if summary %}
+        <h2>Review Summary</h2>
+        <p>{{ summary['summary'] }}</p>
+        <br>
+        {% if summary['strengths'] %}
+            <h3>Strengths</h3>
+            <ul>
+                {% for s in summary['strengths'] %}
+                    <li>{{ s }}</li>
+                {% endfor %}
+            </ul>
+            <br>
+        {% endif %}
+        {% if summary['top_improvements'] %}
+            <h3>Top 3 Improvements</h3>
+            <ul>
+                {% for tip in summary['top_improvements'] %}
+                    <li>{{ tip }}</li>
+                {% endfor %}
+            </ul>
+            <br>
+        {% endif %}
+        {% if summary['readability_score'] %}
+            <h3>Readability Score: {{ summary['readability_score'] }}/10</h3>
+            <p><i>{{ summary['score_reason'] }}</i></p>
+            <br>
+        {% endif %}
+        {% if summary['next_steps'] %}
+            <h4>Next Steps</h4>
+            <p>{{ summary['next_steps'] }}</p>
+            <br>
+        {% endif %}
+    {% else %}
+        <p>No summary available.</p>
+        <br>
+    {% endif %}
+    <a href="/">Try another repo</a>
+{% endblock %}
+

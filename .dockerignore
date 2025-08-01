@@ -1,0 +1,55 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.so
+
+# Virtualenvs
+.venv/
+venv/
+.Venv/
+Venv/
+ENV/
+env/
+
+# Experiment/Cache
+.experiments/
+__pycache__/
+*.pyc
+
+
+# Git
+.git
+.gitignore
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Logs and temp files
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+*.swp
+*.swo
+*.bak
+*.tmp
+
+# dotenv environment files (NEVER put real secrets in an image!)
+.env
+
+# Test & coverage output
+htmlcov/
+.tox/
+.coverage
+.pytest_cache/
+.nox/
+coverage.xml
+
+# Ignore local IDE/editor settings
+.vscode/
+.idea/
+*.iml
