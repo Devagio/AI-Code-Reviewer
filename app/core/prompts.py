@@ -8,28 +8,21 @@ Here is the code:
 Analyze this Python file for the three criteria below and output ONLY valid JSON in the following format:
 {
   "comments": {"status": "...", "suggestion": "..."},
-  "docstrings": {
-      "overall": {"status": "...", "suggestion": "..."},
-      "functions": {
-        "function_name_1": {"status": "...", "suggestion": "..."},
-        "function_name_2": {"status": "...", "suggestion": "..."}
-        // etc., for every public function or class
-      }
-  },
+  "docstrings": {"status": "...", "suggestion": "..."},
   "function_modularity": {"status": "...", "suggestion": "..."}
 }
 
-for every comment Docstrings, functiona modularity in every public function and class, with each name as a key and its own review (`status`: "good" or "needs improvement", and `suggestion`).
-**Comments**:
-- Check for inline comments explaining why is it commented..?, not just what.
-- Are more than 20 percent of functions commented? (estimate based on code structure)
+The allowable values in status are `status`: "good" or "needs improvement". `suggestion` should be "NULL" if `status` is "good".
+
+Criteria for judging Comments:
+- Check for inline comments explaining why is it commented, not just what.
+- Are more than 20 percent of line commented? (estimate based on code structure)
 - Are there too many obvious/useless comments?
 
 **Docstrings**:
-- For each public function and class, does it have a docstring?
-- For each, does the docstring include purpose, parameter types, and return value/type?
-- Does it follow Google or NumPy style?
-- The "overall" key should summarize the overall docstring quality for the file.
+- Do the public functions and classes generally have a docstring?
+- Do the existing docstrings include purpose, parameter types, and return value/type?
+- Do they follow Google or NumPy style?
 
 **Function Modularity/Variable Names**:
 - Are functions small, single-purpose, and modular?
@@ -37,9 +30,8 @@ for every comment Docstrings, functiona modularity in every public function and 
 - Suggest improvements if any function is too long (>32 lines) or poorly named.
 
 
-Output ONLY the JSON as described above, including the "functions" docstring review.
+**Important:** Output ONLY the raw JSON object above. Do NOT wrap your response in any markdown, code blocks, or backticks. No explanations or comments—just the JSON.
 """
-
 
 
 
@@ -162,11 +154,10 @@ Output your findings as a raw JSON object in the following format:
 ATOMIC_Commits = """
 You are an expert code reviewer.
 Check the following git commit message and output ONLY a suggestion (or a compliment if it's already good):
-- Avoid messages like "fix", "update", "changes".
 - Vague commit messages should be flagged.
 - Good messages should describe the change and its purpose.
 - If the message is vague, suggest how to make it more specific.
-- Output a single line suggestion or compliment, nothing else.
+- If the commit message is quite bad or vague, output a single line suggestion; else output a single line compliment. Do not output anything else.
 
 Commit message:
 {{ commit_msg }}
@@ -297,9 +288,9 @@ Your job is to create a bunch of MarkDown tables to help humans be able to under
 
 
 Table 1: 
-Heading: # Project Structure
+Heading: ### Project Structure
 Create a table with three columns (File, File Name, Avaiable) and five rows.
-Under 'File', there will be setup.py, pyproject.toml, setup.cfg, .gitignore, __init__.py)
+Under 'File', there will be setup.py, pyproject.toml, setup.cfg, .gitignore, init.py)
 Under 'File Name' and 'Available' have the corresponding data from the JSON.
 In place of None and False, use the cross emoji; and in place of True, use the tick emoji.
 
@@ -327,19 +318,14 @@ You may replace this entire table by a simple sentence if no requirements.txt-ty
 
 Table 5:
 Heading: ### .py Files
-Create a table whose rows are .py files, and whose columns are file name, comments status, overall docstring status, and function modularity status.
+Create a table whose rows are .py files, and whose columns are file name, comments status, docstring status, and function modularity status.
 In place of "needs improvement", use the cross emoji; and in place of "good", use the tick emoji.
-Right after the table, output a summary of all comment suggestions, overall docstring suggestions, and function modularity suggestions.
+Right after the table, output a 2-line summary of all comment suggestions, 2-line docstring suggestions, and 2-line function modularity suggestions, highlighting the important ones.
+Separate these suggestions ("**Comment Suggestions:**", "**Docstring Suggestions:**", "**Modularity Suggestions:**") using line-breaks.
 You may replace this entire table by a simple sentence if no .py files were found (or way too many .py files were found) according to the JSON.
+
 
 Table 6:
-Heading: ### Functions
-Create a table whose rows are individual functions found in all .py files combined; and whose columns are function name, docstring status, and short docstring suggestion.
-In place of None, False, or absent, use the cross emoji; and in place of True, or present, use the tick emoji.
-You may replace this entire table by a simple sentence if no .py files were found (or way too many .py files were found) according to the JSON.
-
-
-Table 7:
 Heading: ### Commit History
 Create a table of all commits, with columns being "Commit ID", "<4 files changed", "<300 lines changed", and "Commit Message Review".
 If for a given commit, the number of files changed is less than or equal to 3, then give file change limit a tick, else give it a cross.
@@ -347,7 +333,7 @@ If for a given commit, the number of lines changed is less than or equal to 300,
 Under message review, give a shortened review of the commit message.
 You may replace this entire table by a simple sentence if no commits were found according to the JSON.
 
-Table 8:
+Table 7:
 Heading: ### PR History
 Create a table of all PRs, with columns representing the shortened title review, and shortened description review.
 You may replace this entire table by a simple sentence if no PRs were found according to the JSON.
